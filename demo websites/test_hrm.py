@@ -24,8 +24,15 @@ def test_hrm(page: Page) -> None:
 
     # Open OrangeHRM login page
     page.goto(
-        "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login"
+        "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login",
+        wait_until="domcontentloaded",
+        timeout=60000
     )
+
+    # Verify login page loaded
+    expect(
+        page.get_by_role("textbox", name="Username")
+    ).to_be_visible(timeout=30000)
 
     # Enter username
     page.get_by_role("textbox", name="Username").fill("Admin")
@@ -36,22 +43,22 @@ def test_hrm(page: Page) -> None:
     # Click Login
     page.get_by_role("button", name="Login").click()
 
-    # Verify Dashboard is displayed
+    # Verify Dashboard
     expect(
         page.get_by_role("heading", name="Dashboard")
-    ).to_be_visible()
+    ).to_be_visible(timeout=30000)
 
     print("Login successful!")
 
-    # Click user profile dropdown
+    # Click user profile
     page.locator(".oxd-userdropdown-tab").click()
 
     # Click Logout
     page.get_by_role("menuitem", name="Logout").click()
 
-    # Verify login page is displayed
+    # Verify login page
     expect(
         page.get_by_role("textbox", name="Username")
-    ).to_be_visible()
+    ).to_be_visible(timeout=30000)
 
     print("Logout successful!")
